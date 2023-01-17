@@ -6,7 +6,7 @@ This is a little script to help you make quizzes and quiz yourself
 - `Python 3.7+`, download from [here](https://www.python.org/downloads/ "Download Python")
 
 ## How to use
-Just clone this repository and run `main.py`, it will take care of anything for U :) <br>
+Just clone this repository and run `main.py`, it will take care of everything for U :) <br>
 And feel free to modify anything!
 
 ## Troubleshooting

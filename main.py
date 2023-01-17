@@ -12,7 +12,7 @@ def tryImport(package, *things):
     try:
         module = __import__(package)
     except ImportError:
-        print("Colorama doesn't seems to be installed on your device")
+        print(f"{package} doesn't seems to be installed on your device")
         inp = input("would you like it to be installed? [Y/N] ").lower()
         while inp not in ["y", "n"]:
             inp = input("[Y/N] ")
@@ -42,6 +42,10 @@ What would you like to do?
 quiz_message = f"""{Style.BRIGHT}================================
 = Are you ready to be {Back.LIGHTBLACK_EX}Quiz{Back.RESET}zed? =
 ================================{Style.RESET_ALL}"""
+
+make_message = f"""{Style.BRIGHT}==================
+= Making a {Back.LIGHTBLACK_EX}Quiz{Back.RESET}! =
+=================={Style.RESET_ALL}"""
 
 
 def clear():
@@ -124,6 +128,18 @@ def showQuiz(quizFile):
             print(Fore.RED + "Not exactly..." + Style.RESET_ALL)
             sleep(1)
 
+    clear()
+
+    stats = f"You got {right}/{len(quiz)} ({round(right / len(quiz) * 100, 2)}%) right, " + \
+            ("Excellent!" if right / len(quiz) > 0.9 else "Nice!" if right / len(quiz) > 0.7 else "Maybe next time")
+
+    border_len = len(stats) + 4
+    msg = f"{Style.BRIGHT}{'=' * border_len}\n" \
+          f"= {stats} =\n" \
+          f"{'=' * border_len}{Style.RESET_ALL}"
+
+    print(msg)
+
 
 def runQuiz():
     clear()
@@ -140,8 +156,38 @@ def runQuiz():
             quiz_file = input("Please try another file: ")
 
 
+def save(questions):
+    filename = input("Your file? ")
+    with open(filename, "w") as f:
+        for q in questions:
+            for a in q:
+                f.write(a + "\n")
+            f.write("\n")
+    print("File was successfully saved!")
+
+
 def makeQuiz():
-    pass
+    clear()
+    print(make_message)
+    questions = []
+    while True:
+        question = input("Enter a question or q to exit: ")
+        if question == "q":
+            save(questions)
+            break
+        else:
+            questions += [[question]]
+            while True:
+                answer = input("Enter an answer or done if done: ")
+                if answer.lower() == "done":
+                    break
+                else:
+                    questions[-1] += [answer]
+            right = "-1"
+            while not right.isdigit() or int(right) < 1 or int(right) > len(questions[-1]):
+                right = input("Enter the number of the right answer: ")
+
+            questions[-1] += [right]
 
 
 def menu():
@@ -166,7 +212,6 @@ def menu():
 
 def main():
     menu()
-    showQuiz("quiz.qz")
 
 
 if __name__ == '__main__':
